@@ -1,42 +1,23 @@
 typedef double tdato;
-struct Informacion
+struct Usuario
 {
     tdato numero_primo;
     tdato alfa;
     tdato x;
     tdato y;
     tdato k;
-}Data_A,Data_B;
+};
 
 using namespace std;
 
-void escoger_secreto(void)
+
+void informacion_inicial(double &primo,double &alfa_)
 {
-    tdato primo;
-    tdato alfa;
-    cout << "Introduzca numero primo: ";
-    cin >> primo;
-
-    cout << "Introduzca alfa:";
-    cin >> alfa;
-    Data_A.numero_primo = primo;
-    Data_A.alfa = alfa;
-    Data_B.numero_primo = primo;
-    Data_B.alfa = alfa;
-
-    cout << "Introduzca xa: ";
-    cin >> Data_A.x;
-
-    cout << "Introduzca xb: ";
-    cin >> Data_B.x;
-}
-
-void informacion_inicial(void)
-{
-    cout << "Informacion actual:\tUsu_A\tUsu_B" << endl;
-    cout << "Numero primo:\t\t" << Data_A.numero_primo << "\t" << Data_B.numero_primo << endl;
-    cout << "Numero alfa:\t\t" << Data_A.alfa << "\t" << Data_B.alfa << endl;
-    cout << "X:\t\t\t" << Data_A.x <<"\t" << Data_B.x << endl;
+  cout << "Introduzca numero primo: ";
+  cin >> primo;
+  cout << "Introduzca alfa:";
+  cin >> alfa_;
+  cout << endl;
 }
 
 double exponenciacion_rapida(double base, double exponente, double modulo)
@@ -61,25 +42,45 @@ double exponenciacion_rapida(double base, double exponente, double modulo)
     return x;
 }
 
-void calcular_y(void)
+void calcular_y(vector<Usuario> &u)
 {
-    //Data_A.y = fmod(pow(Data_A.alfa,Data_A.x), Data_A.numero_primo);
-    //Data_B.y = fmod(pow(Data_B.alfa,Data_B.x), Data_B.numero_primo);
-    Data_A.y = exponenciacion_rapida(Data_A.alfa,Data_A.x,Data_A.numero_primo);
-    Data_B.y = exponenciacion_rapida(Data_B.alfa,Data_B.x,Data_B.numero_primo);
+    double auxiliar = 0;
+    for(int i=0;i<u.size();i++)
+    {
+      auxiliar = exponenciacion_rapida(u[i].alfa,u[i].x,u[i].numero_primo);
+      //cout << "exponenciacion_rapida => " << auxiliar << endl;
+      u[i].y = auxiliar;
+    }
 }
 
-void generar_k(void)
+void generar_k(vector<Usuario> &u)
 {
-    //Data_A.k = fmod(pow(Data_B.y,Data_A.x), Data_A.numero_primo);
-    //Data_B.k = fmod(pow(Data_A.y,Data_B.x), Data_B.numero_primo);
-    Data_A.k = exponenciacion_rapida(Data_B.y,Data_A.x,Data_A.numero_primo);
-    Data_B.k = exponenciacion_rapida(Data_A.y,Data_B.x,Data_B.numero_primo);
+    double auxiliar = 0;
+    for(int i=0;i<u.size();i++)
+    {
+      if(i % 2 == 0)
+      {
+        auxiliar = exponenciacion_rapida(u[i+1].y,u[i].x,u[i].numero_primo);
+        cout << "exponenciacion_rapida => " << auxiliar << endl;
+        u[i].k = auxiliar;
+      }
+      else
+      {
+        auxiliar = exponenciacion_rapida(u[i-1].y,u[i].x,u[i].numero_primo);
+        cout << "exponenciacion_rapida => " << auxiliar << endl;
+        u[i].k = auxiliar;
+      }
+    }
 }
 
-void mostrar_resultados(void)
+void mostrar_resultados(int primo, int alfa_,vector<Usuario> &u)
 {
-  informacion_inicial();
-  cout << "Y:\t\t\t" << Data_A.y <<"\t" << Data_B.y << endl;
-  cout << "k:\t\t\t" << Data_A.k <<"\t" << Data_B.k << endl;
+  cout << "Numero primo: " << primo << endl;
+  cout << "Alfa: " << alfa_ << endl;
+  for(int i=0;i<u.size();i++)
+  {
+    cout << "Usuario " << i+1 << ": ";
+    cout << " x => " << u[i].x << " , y => " << u[i].y << " , k => " << u[i].k << endl;
+  }
+  cout << endl;
 }

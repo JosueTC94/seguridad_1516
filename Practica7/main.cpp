@@ -2,32 +2,65 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <vector>
+
 #include "funciones.cpp"
 
 using namespace std;
 
 int main()
 {
+  double numero_primo = 0;
+  double alfa = 0;
+  int numero_users = 0;
+  vector<Usuario> users;
+
+  int contador = 0;
   string opcion;
   bool control = false;
   do {
-      cout << endl;
-      escoger_secreto();
+      informacion_inicial(numero_primo,alfa);
+      cout << "Introduzca el numero de usuarios:";
+      cin >> numero_users;
+
+      while(contador < numero_users)
+      {
+        Usuario aux;
+        int x_;
+        aux.numero_primo = numero_primo;
+        aux.alfa = alfa;
+        users.resize(users.size()+1);
+        cout << "Para usuario " << contador+1 << " => Introduzca x:";
+        cin >> x_;
+        aux.x = x_;
+        users[contador] = aux;
+        contador++;
+      }
       cout << "---------------------------------------" << endl;
-      informacion_inicial();
-      cout << "---------------------------------------" << endl;
+
       cout << "Intercambio de claves..." << endl;
       cout << "Paso1.- Calcular y." << endl;
-      calcular_y();
+      calcular_y(users);
       cout << "Paso2.- Calcular k." << endl;
-      generar_k();
-      mostrar_resultados();
+      generar_k(users);
+      cout << "---------------------------------------" << endl;
+
+      mostrar_resultados(numero_primo,alfa,users);
+
       cout << "¿Desea ejecutar de nuevo?[S/N]" << endl;
       cin >> opcion;
 
       if(opcion == "S" || opcion == "s")
       {
         control = false;
+        while(!users.empty())
+        {
+            users.pop_back();
+        }
+        numero_primo = 0;
+        alfa = 0;
+        numero_users = 0;
+        contador = 0;
       }
       else
       {
