@@ -12,17 +12,18 @@ int main()
 {
   double numero_primo = 0;
   double alfa = 0;
-  int numero_users = 0;
+  int numero_users = 2;
   vector<Usuario> users;
-
+  vector<double> users_y_mod; // vector para la modificación
   int contador = 0;
   string opcion;
   bool control = false;
   do {
-      informacion_inicial(numero_primo,alfa);
-      cout << "Introduzca el numero de usuarios:";
-      cin >> numero_users;
 
+      informacion_inicial(numero_primo,alfa);
+
+      cout << "Introduzca el numero de usuarios:" << endl;
+      cin >> numero_users;
       while(contador < numero_users)
       {
         Usuario aux;
@@ -30,6 +31,7 @@ int main()
         aux.numero_primo = numero_primo;
         aux.alfa = alfa;
         users.resize(users.size()+1);
+        users_y_mod.resize(users_y_mod.size()+1);
         cout << "Para usuario " << contador+1 << " => Introduzca x:";
         cin >> x_;
         aux.x = x_;
@@ -43,9 +45,11 @@ int main()
       calcular_y(users);
       cout << "Paso2.- Calcular k." << endl;
       generar_k(users);
+      cout << "Paso3.- Modificacion." << endl;
+      modificacion(users,users_y_mod);
       cout << "---------------------------------------" << endl;
 
-      mostrar_resultados(numero_primo,alfa,users);
+      mostrar_resultados(numero_primo,alfa,users,users_y_mod);
 
       cout << "¿Desea ejecutar de nuevo?[S/N]" << endl;
       cin >> opcion;
